@@ -53,7 +53,7 @@
         })
         .then(data => {
             if (data) {
-                const highlightedData = data.replace(/(\d+\.\d+\.\d+\.\d+\s+\/\w+\s+\d+\s+\d+)/g, '<span class="poid">$&</span>');
+                const highlightedData = data.replace(/(\d+\.\d+\.\d+\.\d+\s+\/\S+\s+\d+\s+\d+)/g, '<span class="poid">$&</span>');
                 targetElement.innerHTML = highlightedData;
                 addPoidClickListenersTo(targetElement.parentElement); // Add listeners to the container of the results
             } else {
