@@ -30,7 +30,21 @@ python brm_buddy.py
 
 The server will listen on the port specified in [`settings.py`](settings.py) (default: 9876).
 
-### Usage
+### Web Interface
+
+The web interface is served from the [`public/`](public/) directory and consists of:
+
+- [`public/index.html`](public/index.html): The main UI for running opcodes, selecting domains and tasks, and viewing results.
+- [`public/opcode_examples.js`](public/opcode_examples.js): Provides example opcodes, flags, and flists grouped by domain and task, which are loaded into the UI for quick selection.
+- [`public/style.css`](public/style.css): Styles the web interface for a clean, modern look.
+
+#### Features
+
+- **Domain & Task Selection:** Choose from pre-defined domains and tasks to auto-fill opcode, flag, and flist fields.
+- **Run Opcode:** Submit any opcode, flag, and flist to the backend and view the output in real time.
+- **POID Drilldown:** Click on any highlighted POID in the output to open a modal with detailed object information (using `PCM_OP_READ_OBJ`).
+
+#### Usage
 
 1. **Open your browser and navigate to:**
    ```
@@ -38,7 +52,7 @@ The server will listen on the port specified in [`settings.py`](settings.py) (de
    ```
    > **Note:** If you updated the port in settings.py, then use that port number instead of `9876` in the URL above.
 2. **Use the web interface to:**
-   - Enter an opcode, flag, and Flist.
+   - Select a domain and task, or enter an opcode, flag, and Flist manually.
    - Click "Run Opcode" to execute and view results.
    - Click on any highlighted POID in the output to drill down into object details (opens in a modal).
 
