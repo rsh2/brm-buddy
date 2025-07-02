@@ -47,7 +47,19 @@ def run_cmd(cmd):
     Falls back gracefully if subprocess is unavailable.
     """
     if subprocess is None:
-        return "subprocess module is not available. It needs to be installed manually"
+        # Fallback to os.popen for old python 2.x
+        import pipes
+        cmdstr = ""
+        for arg in cmd:
+            cmdstr += pipes.quote(arg) + " "
+        try:
+            process = os.popen(cmdstr)
+            output = process.read()
+            process.close()
+            return output
+        except Exception:
+            return "Error running command: %s " % cmd
+
 
     try:
         proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
@@ -194,7 +206,7 @@ class RequestHandler(BaseHTTPRequestHandler):
             else:
                 flist = flist.replace('+', ' ')
                 flist = urllib.unquote(flist)
-            display("Running opcode: %s, flag: %s, flist:\n%s" % (opcode, flag, flist))
+            display("Running opcode: %s, flag: %s, flist:\n%s" % (opcode, flag, flist.strip()))
 
             response = self.run_opcode(opcode, flag, flist)
         else:
