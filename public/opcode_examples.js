@@ -31,18 +31,18 @@ const opcodeExamples = {
           "task": "Search - 100 Latest Events for an Account",
           "opcode": "PCM_OP_SEARCH",
           "flag": "0",
-          "flist": "0 PIN_FLD_POID           POID [0] 0.0.0.1 /search/pin -1 0\n0 PIN_FLD_FLAGS           INT [0] 256\n0 PIN_FLD_TEMPLATE        STR [0] \"select X from /event where F1 like V1 and F2 = V2 order by event_t.created_t desc \"\n0 PIN_FLD_ARGS          ARRAY [1]\n1     PIN_FLD_POID           POID [0] 0.0.0.1 /event/% -1 0\n0 PIN_FLD_ARGS          ARRAY [2]\n1     PIN_FLD_ACCOUNT_OBJ    POID [0] 0.0.0.1 /account 1 0\n0 PIN_FLD_RESULTS       ARRAY [100]\n1     PIN_FLD_POID           POID [0] NULL\n1     PIN_FLD_NAME            STR [0] NULL\n1     PIN_FLD_DESCR           STR [0] NULL\n1     PIN_FLD_SYS_DESCR       STR [0] NULL\n1     PIN_FLD_CREATED_T    TSTAMP [0] (0)"
+          "flist": "0 PIN_FLD_POID           POID [0] 0.0.0.1 /search/pin -1 0\n0 PIN_FLD_FLAGS           INT [0] 256\n0 PIN_FLD_TEMPLATE        STR [0] \"select X from /event where F1 = V1 order by event_t.created_t desc \"\n0 PIN_FLD_ARGS          ARRAY [1]\n1     PIN_FLD_ACCOUNT_OBJ    POID [0] 0.0.0.1 /account 1 0\n0 PIN_FLD_RESULTS       ARRAY [100]\n1     PIN_FLD_POID           POID [0] NULL\n1     PIN_FLD_NAME            STR [0] NULL\n1     PIN_FLD_DESCR           STR [0] NULL\n1     PIN_FLD_SYS_DESCR       STR [0] NULL\n1     PIN_FLD_CREATED_T    TSTAMP [0] (0)"
         }
       ]
     },
     {
-      "domain": "System Manager Opcodes",
+      "domain": "Balance FM Opcodes",
       "examples": [
         {
-          "task": "Set CM Log Level",
-          "opcode": "PCM_OP_INFMGR_SET_LOGLEVEL",
+          "task": "Get Account contact and billinfo",
+          "opcode": "PCM_OP_BAL_GET_ACCT_BILLINFO",
           "flag": "0",
-          "flist": "0 PIN_FLD_POID           POID [0] 0.0.0.1 /account 1 1\n0 PIN_FLD_COMPONENT       STR [0] \"CM\"\n0 PIN_FLD_LOGLEVEL        INT [0] 3"
+          "flist": "0 PIN_FLD_POID           POID [0] 0.0.0.1 /account 1 0"
         }
       ]
     }
