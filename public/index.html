@@ -48,6 +48,7 @@
         const flagInput = document.getElementById('flag');
         const flistTextarea = document.getElementById('flist');
         let modalCount = 0; // Counter for cascading modals
+        var escapeElem = document.createElement('textarea');
 
         /*
         * Dynamically populate domains and tasks and set up event listeners
@@ -97,6 +98,15 @@
             }
         });
 
+
+        /**
+         * Escapes HTML special characters to prevent XSS attacks.
+         */
+        function escapeHtml(unsafe) {
+            escapeElem.textContent = unsafe;
+            return escapeElem.innerHTML;
+        }
+
         /**
          * Fetches opcode data and displays it in a specified target element.
          * After displaying, it makes any new POIDs in the output clickable.
@@ -117,7 +127,10 @@
             })
             .then(data => {
                 if (data) {
-                    const highlightedData = data.replace(/(\d+\.\d+\.\d+\.\d+\s+\/\S+\s+\d+\s+\d+)/g, '<span class="poid">$&</span>');
+                    // Sometimes the flist buffer can contain HTML tags, so we escape it
+                    // and then highlight the POIDs in the output.
+                    const escapedData = escapeHtml(data);
+                    const highlightedData = escapedData.replace(/(\d+\.\d+\.\d+\.\d+\s+\/\S+\s+\d+\s+\d+)/g, '<span class="poid">$&</span>');
                     targetElement.innerHTML = highlightedData;
                     addPoidClickListenersTo(targetElement.parentElement); // Add listeners to the container of the results
                 } else {
