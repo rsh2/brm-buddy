@@ -14,6 +14,9 @@ import sys
 import settings
 
 PORT = settings.PORT
+DB_USER = settings.DB_USER
+DB_PASSWORD = settings.DB_PASSWORD
+DB_SERVICE = settings.DB_SERVICE
 
 # Ensure compatibility between Python 2 and 3 for HTTP server and URL parsing
 try:
@@ -206,9 +209,26 @@ class RequestHandler(BaseHTTPRequestHandler):
             else:
                 flist = flist.replace('+', ' ')
                 flist = urllib.unquote(flist)
-            display("Running opcode: %s, flag: %s, flist:\n%s" % (opcode, flag, flist.strip()))
+                flist = flist.strip()
+            display("Running opcode: %s, flag: %s, flist:\n%s" % (opcode, flag, flist))
 
             response = self.run_opcode(opcode, flag, flist)
+        elif action_path == 'run_sql':
+            sql = ''
+
+            # Extract parameters from POST data
+            if 'sql' in post_data and len(post_data['sql']) > 0:
+                sql = post_data['sql'][0]
+
+            # Decode URL-encoded sql
+            if sys.version_info[0] >= 3:
+                sql = urlparse.unquote(sql)
+            else:
+                sql = sql.replace('+', ' ')
+                sql = urllib.unquote(sql)
+            display("Running SQL: %s" % sql.strip())
+
+            response = self.run_sql(sql)
         else:
             response = "Unknown action"
 
@@ -228,6 +248,12 @@ class RequestHandler(BaseHTTPRequestHandler):
         """
         return run_cmd(["scripts/call_testnap.sh", opcode, flag, flist])
 
+    def run_sql(self, sql):
+        """
+        Executes the specified SQL using the sqlplus helper shell script.
+        """
+        return run_cmd(["scripts/call_sqlplus.sh", DB_USER, DB_PASSWORD, DB_SERVICE, sql])
+
 
 def main():
     """
@@ -239,6 +265,7 @@ def main():
     # Set testnap home directory in the shell script and ensure it is executable
     run_cmd(["sed", "-i", "s#^test_home=.*#test_home=%s#g" % settings.TESTNAP_HOME, "scripts/call_testnap.sh"])
     run_cmd(["chmod", "+x", "scripts/call_testnap.sh"])
+    run_cmd(["chmod", "+x", "scripts/call_sqlplus.sh"])
 
     try:
         server.serve_forever()

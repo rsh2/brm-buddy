@@ -4,3 +4,8 @@ PORT = 9876
 # Specify the directory path where the testnap configuration file (pin.conf) is located.
 # This directory is used by the main Python script to execute opcodes via testnap.
 TESTNAP_HOME = "$PIN_HOME/sys/test"
+
+# Oracle Database connection settings for SQL Workbench
+DB_USER = "your_db_user"
+DB_PASSWORD = "your_db_password"
+DB_SERVICE = "your_db_service"

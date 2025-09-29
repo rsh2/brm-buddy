@@ -1,0 +1,32 @@
+<section id="opcodes-section" class="content-section">
+    <h2>Run Opcode</h2>
+    <form id="run-opcode-form">
+        <div class="form-group">
+            <label for="domain-select">Domain:</label>
+            <select name="domain" id="domain-select">
+                <option value="">-- Select a Domain --</option>
+            </select>
+            <label for="task-select">Tasks:</label>
+            <select name="task" id="task-select">
+                <option value="">-- Select a Task --</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="opcode">Opcode:</label>
+            <input type="text" name="opcode" id="opcode" placeholder="e.g., PCM_OP_TEST_LOOPBACK">
+        </div>
+
+        <div class="form-group">
+            <label for="flag">Flag:</label>
+            <input type="text" name="flag" id="flag" value="0">
+        </div>
+
+        <div class="form-group">
+            <label for="flist">Flist:</label><br>
+            <textarea name="flist" id="flist" rows="20" cols="120" placeholder="Enter your Flist here..."></textarea>
+        </div>
+
+        <button type="submit">Run Opcode</button>
+    </form>
+    <pre id="opcode-results">Click "Run Opcode" to see the output.</pre>
+</section>
