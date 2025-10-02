@@ -325,6 +325,9 @@ footer {
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    max-width: 100%;
+    overflow: visible;
+    margin-bottom: 20px;
 }
 
 .sql-results-table {
@@ -352,6 +355,153 @@ footer {
     background-color: #f1f1f1;
 }
 
+/* Unix Epoch Converter Styles */
+.converter {
+    display: grid;
+    grid-template-columns: 1fr 70px 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+    position: relative;
+    max-width: 100%;
+    overflow: visible;
+    align-items: center;
+}
+
+.converter input {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.converter .btn {
+    background: #5DADE2;
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.3s;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.converter .btn:hover {
+    background: #3498DB;
+}
+
+.converter .btn svg {
+    width: 32px;
+    height: 32px;
+    fill: white;
+    stroke: white;
+    stroke-width: 1;
+}
+
+.converter .buttons-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+.controls {
+    display: grid;
+    grid-template-columns: 1fr 70px 1fr;
+    gap: 10px;
+    position: relative;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.timezone-wrapper {
+    position: relative;
+    width: 100%;
+    grid-column: 1;
+}
+
+.now-btn-wrapper {
+    grid-column: 3;
+}
+
+.timezone-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    max-height: 200px;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    border-top: none;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    display: none;
+    z-index: 1000;
+    margin-top: 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    width: 100%;
+}
+
+.timezone-dropdown.active {
+    display: block;
+}
+
+.timezone-option {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.timezone-option:hover {
+    background: #f0f0f0;
+}
+
+.timezone-option.selected {
+    background: #e0e0e0;
+}
+
+.now-btn-wrapper {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.now-btn {
+    background: #5DADE2;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    white-space: nowrap;
+    padding: 11px 20px;
+    height: 46px;
+}
+
+.now-btn:hover {
+    background: #3498DB;
+}
+
+.now-btn:hover {
+    background: #2980b9;
+}
+
+#timezoneFilter {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+    margin-bottom: 0;
+    box-sizing: border-box;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .layout {
@@ -371,5 +521,50 @@ footer {
     .footer-content {
         flex-direction: column;
         gap: 10px;
+    }
+
+    .converter {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .converter .buttons-wrapper {
+        flex-direction: row;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .converter input {
+        width: 100%;
+    }
+
+    .converter .btn {
+        width: 50px;
+        height: 50px;
+    }
+
+    .converter .btn svg {
+        width: 32px;
+        height: 32px;
+    }
+
+    .controls {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .timezone-wrapper {
+        position: static;
+        width: 100%;
+        grid-column: 1;
+    }
+
+    .now-btn-wrapper {
+        grid-column: 1;
+        width: 100%;
+    }
+
+    .now-btn {
+        width: 100%;
     }
 }

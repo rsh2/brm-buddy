@@ -85,6 +85,10 @@ const appModules = [
         ]
       }
     ]
+  },
+  {
+    "name": "Utilities",
+    "type": "ui"
   }
 ];
 

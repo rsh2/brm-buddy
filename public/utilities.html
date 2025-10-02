@@ -1,0 +1,29 @@
+<h2>Utilities</h2>
+<div class="content-section">
+    <h3>Unix Epoch Converter</h3>
+    <div class="converter">
+        <input type="text" id="epochInput" placeholder="Unix Epoch">
+        <div class="buttons-wrapper">
+            <button id="convertRight" class="btn" title="Convert to Readable">
+                <svg viewBox="0 0 24 24">
+                    <path d="M9 5l7 7-7 7"/>
+                </svg>
+            </button>
+            <button id="convertLeft" class="btn" title="Convert to Epoch">
+                <svg viewBox="0 0 24 24">
+                    <path d="M15 5l-7 7 7 7"/>
+                </svg>
+            </button>
+        </div>
+        <input type="text" id="readableInput" placeholder="YYYY-MM-DD HH:mm:ss">
+    </div>
+    <div class="controls">
+        <div class="timezone-wrapper">
+            <input type="text" id="timezoneFilter" placeholder="Time Zone">
+            <div id="timezoneDropdown" class="timezone-dropdown"></div>
+        </div>
+        <div class="now-btn-wrapper">
+            <button id="nowButton" class="now-btn">Now</button>
+        </div>
+    </div>
+</div>

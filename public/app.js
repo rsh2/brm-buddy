@@ -167,6 +167,177 @@ document.addEventListener('DOMContentLoaded', () => {
                     fetchAndDisplaySqlResponse(formData, document.getElementById('sql-results'));
                 });
             }
+        } else if (sectionType === 'utilities') {
+            const epochInput = document.getElementById('epochInput');
+            const readableInput = document.getElementById('readableInput');
+            const timezoneFilter = document.getElementById('timezoneFilter');
+            const timezoneDropdown = document.getElementById('timezoneDropdown');
+            const convertRight = document.getElementById('convertRight');
+            const convertLeft = document.getElementById('convertLeft');
+            const nowButton = document.getElementById('nowButton');
+
+            let timezones = Intl.supportedValuesOf('timeZone');
+            if (!timezones.includes('Etc/UTC') && !timezones.includes('UTC')) {
+                timezones = ['UTC', ...timezones];
+            }
+            
+            let selectedTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+            timezoneFilter.value = selectedTimezone;
+
+            // Align controls with inputs above
+            function alignControls() {
+                const epochRect = epochInput.getBoundingClientRect();
+                const readableRect = readableInput.getBoundingClientRect();
+                const controlsRect = document.querySelector('.controls').getBoundingClientRect();
+
+                const timezoneWrapper = document.querySelector('.timezone-wrapper');
+                const nowBtnWrapper = document.querySelector('.now-btn-wrapper');
+
+                const epochWidth = epochRect.width;
+
+                timezoneWrapper.style.left = (epochRect.left - controlsRect.left) + 'px';
+                timezoneWrapper.style.width = epochWidth + 'px';
+                nowBtnWrapper.style.left = (readableRect.left - controlsRect.left) + 'px';
+            }
+            
+            alignControls();
+            window.addEventListener('resize', alignControls);
+
+            function filterTimezones(query) {
+                return timezones.filter(tz => tz.toLowerCase().includes(query.toLowerCase()));
+            }
+
+            function renderTimezoneOptions(filteredTimezones) {
+                timezoneDropdown.innerHTML = '';
+                filteredTimezones.forEach(tz => {
+                    const option = document.createElement('div');
+                    option.className = 'timezone-option';
+                    if (tz === selectedTimezone) option.classList.add('selected');
+                    option.textContent = tz;
+                    option.addEventListener('click', () => {
+                        selectedTimezone = tz;
+                        timezoneFilter.value = tz;
+                        timezoneDropdown.classList.remove('active');
+                    });
+                    timezoneDropdown.appendChild(option);
+                });
+            }
+
+            timezoneFilter.addEventListener('focus', () => {
+                renderTimezoneOptions(filterTimezones(timezoneFilter.value));
+                timezoneDropdown.classList.add('active');
+            });
+
+            timezoneFilter.addEventListener('input', (e) => {
+                renderTimezoneOptions(filterTimezones(e.target.value));
+                timezoneDropdown.classList.add('active');
+            });
+
+            timezoneFilter.addEventListener('blur', () => {
+                setTimeout(() => {
+                    timezoneDropdown.classList.remove('active');
+                    if (!timezones.includes(timezoneFilter.value)) {
+                        timezoneFilter.value = selectedTimezone;
+                    }
+                }, 200);
+            });
+
+            epochInput.addEventListener('input', () => readableInput.value = '');
+            readableInput.addEventListener('input', () => epochInput.value = '');
+
+            function formatDateToReadable(date, timezone) {
+                const formatter = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: timezone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false
+                });
+                
+                const parts = formatter.formatToParts(date);
+                const year = parts.find(p => p.type === 'year').value;
+                const month = parts.find(p => p.type === 'month').value;
+                const day = parts.find(p => p.type === 'day').value;
+                const hour = parts.find(p => p.type === 'hour').value;
+                const minute = parts.find(p => p.type === 'minute').value;
+                const second = parts.find(p => p.type === 'second').value;
+                
+                return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
+            }
+
+            function parseReadableToDate(readable, timezone) {
+                const match = readable.match(/^(\d{4})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2}):(\d{2})$/);
+                if (!match) return null;
+                
+                const [, year, month, day, hour, minute, second] = match;
+                const formatter = new Intl.DateTimeFormat('en-US', {
+                    timeZone: timezone,
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                    hour12: false,
+                    timeZoneName: 'shortOffset'
+                });
+                
+                const utcDate = new Date(Date.UTC(
+                    parseInt(year),
+                    parseInt(month) - 1,
+                    parseInt(day),
+                    parseInt(hour),
+                    parseInt(minute),
+                    parseInt(second)
+                ));
+                
+                const parts = formatter.formatToParts(utcDate);
+                const offsetPart = parts.find(p => p.type === 'timeZoneName');
+                let offsetMinutes = 0;
+                
+                if (offsetPart && offsetPart.value.match(/GMT([+-]\d+)/)) {
+                    const offsetMatch = offsetPart.value.match(/GMT([+-])(\d+)(?::(\d+))?/);
+                    if (offsetMatch) {
+                        const sign = offsetMatch[1] === '+' ? 1 : -1;
+                        const hours = parseInt(offsetMatch[2]) || 0;
+                        const minutes = parseInt(offsetMatch[3]) || 0;
+                        offsetMinutes = sign * (hours * 60 + minutes);
+                    }
+                }
+                
+                return new Date(utcDate.getTime() - offsetMinutes * 60000);
+            }
+
+            convertRight.addEventListener('click', () => {
+                const epoch = parseInt(epochInput.value);
+                if (isNaN(epoch)) {
+                    alert('Please enter a valid Unix Epoch timestamp');
+                    return;
+                }
+                readableInput.value = formatDateToReadable(new Date(epoch * 1000), selectedTimezone);
+            });
+
+            convertLeft.addEventListener('click', () => {
+                if (!readableInput.value) {
+                    alert('Please enter a readable time');
+                    return;
+                }
+                const date = parseReadableToDate(readableInput.value, selectedTimezone);
+                if (!date || isNaN(date.getTime())) {
+                    alert('Please enter a valid time in format: YYYY-MM-DD HH:mm:ss');
+                    return;
+                }
+                epochInput.value = Math.floor(date.getTime() / 1000);
+            });
+
+            nowButton.addEventListener('click', () => {
+                const now = new Date();
+                epochInput.value = Math.floor(now.getTime() / 1000);
+                readableInput.value = formatDateToReadable(now, selectedTimezone);
+            });
         }
     }
 
@@ -179,7 +350,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const fileMap = {
                  'Run Opcode': 'run_opcode.html',
-                 'Quick SQL': 'quick_sql.html'
+                 'Quick SQL': 'quick_sql.html',
+                 'Utilities': 'utilities.html'
              };
             loadContent(fileMap[moduleName]);
         }

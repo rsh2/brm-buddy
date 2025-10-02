@@ -39,6 +39,7 @@ The web interface is served from the [`public/`](public/) directory and consists
 - [`public/index.html`](public/index.html): The main UI with navigation for different modules.
 - [`public/run_opcode.html`](public/run_opcode.html): Interface for running BRM opcodes.
 - [`public/quick_sql.html`](public/quick_sql.html): Interface for executing SQL queries against the Oracle database.
+- [`public/utilities.html`](public/utilities.html): Interface for utilities like Unix Epoch converter.
 - [`public/module_examples.js`](public/module_examples.js): Provides example opcodes and SQL queries grouped by domain and task, which are loaded into the UI for quick selection.
 - [`public/style.css`](public/style.css): Styles the web interface for a clean, modern look.
 
@@ -46,6 +47,7 @@ The web interface is served from the [`public/`](public/) directory and consists
 
 - **Run Opcode:** Execute BRM opcodes with domain and task selection to auto-fill fields, or enter custom opcodes manually. View results in real-time with POID drilldown.
 - **Quick SQL:** Run SQL queries against the Oracle database with pre-defined examples by domain. Results are displayed in tabular format for SELECT queries.
+- **Utilities:** Convert between Unix Epoch timestamps and readable dates with timezone support.
 - **POID Drilldown:** Click on any highlighted POID in opcode output to open a modal with detailed object information (using `PCM_OP_READ_OBJ`).
 - **Modular Interface:** Clean navigation between different tools with customizable examples.
 
@@ -59,5 +61,6 @@ The web interface is served from the [`public/`](public/) directory and consists
 2. **Use the web interface:**
     - **Run Opcode:** Select "Run Opcode" from the sidebar. Choose a domain and task to auto-fill fields, or enter custom opcodes. Click "Run Opcode" to execute and view results. Click highlighted POIDs for drilldown.
     - **Quick SQL:** Select "Quick SQL" from the sidebar. Choose a domain and SQL query, or enter custom SQL. Click "Run SQL" to execute. SELECT results display in tables; other queries show plain text.
+    - **Utilities:** Select "Utilities" from the sidebar. Use the Unix Epoch converter to convert between timestamps and readable dates, with timezone selection.
 
 **Note:** The application is designed for use on systems with access to BRM tools and Oracle database, typically on the BRM server itself.
