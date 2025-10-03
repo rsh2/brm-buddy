@@ -23,12 +23,18 @@ try:
     # Python 2 imports
     import BaseHTTPServer
     from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
+    from SocketServer import ThreadingMixIn
     import urlparse
     import urllib
 except ImportError:
     # Python 3 equivalents
     from http.server import BaseHTTPRequestHandler, HTTPServer
+    from socketserver import ThreadingMixIn
     import urllib.parse as urlparse
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """Threaded HTTP server to handle concurrent requests."""
+    pass
 
 def display(msg):
     """
@@ -259,7 +265,7 @@ def main():
     """
     Entry point: Starts the HTTP server and prepares the testnap helper script.
     """
-    server = HTTPServer(('0.0.0.0', PORT), RequestHandler)
+    server = ThreadedHTTPServer(('0.0.0.0', PORT), RequestHandler)
     display("Serving HTTP on port %d ..." % PORT)
 
     # Set testnap home directory in the shell script and ensure it is executable

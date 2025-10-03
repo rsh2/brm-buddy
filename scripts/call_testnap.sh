@@ -4,7 +4,7 @@
 test_home=__testnap_home__
 
 # Path to the temporary testnap input file that will be created and used
-nap_file="$test_home/brm_buddy_testnap.nap"
+nap_file=$(mktemp "$test_home/brm_buddy_testnap.XXXXXX.nap")
 
 # Read arguments passed from the Python script:
 # $1 = opcode to execute
@@ -27,4 +27,7 @@ cd $test_home
 
 # Run testnap with the generated input file
 testnap $nap_file
+
+# Clean up the temporary file
+rm "$nap_file"
 
