@@ -1,32 +1,47 @@
-<section id="opcodes-section" class="content-section">
-    <h2>Run Opcode</h2>
-    <form id="run-opcode-form">
-        <div class="form-group">
-            <label for="domain-select">Domain:</label>
-            <select name="domain" id="domain-select">
-                <option value="">-- Select a Domain --</option>
-            </select>
-            <label for="task-select">Tasks:</label>
-            <select name="task" id="task-select">
-                <option value="">-- Select a Task --</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="opcode">Opcode:</label>
-            <input type="text" name="opcode" id="opcode" placeholder="e.g., PCM_OP_TEST_LOOPBACK">
-        </div>
+<section id="opcodes-section" class="content-section" aria-labelledby="opcode-title">
+    <h2 id="opcode-title">Run Opcode</h2>
+    <form id="run-opcode-form" aria-label="Opcode execution form">
+        <fieldset>
+            <legend class="sr-only">Opcode Selection</legend>
+            <div class="form-group">
+                <label for="domain-select">Domain:</label>
+                <select name="domain" id="domain-select" aria-describedby="domain-help">
+                    <option value="">-- Select a Domain --</option>
+                </select>
+                <span id="domain-help" class="form-help-text">Choose a domain to see available tasks</span>
+            </div>
+            <div class="form-group">
+                <label for="task-select">Tasks:</label>
+                <select name="task" id="task-select" aria-describedby="task-help">
+                    <option value="">-- Select a Task --</option>
+                </select>
+                <span id="task-help" class="form-help-text">Select a task to auto-fill the form</span>
+            </div>
+        </fieldset>
 
-        <div class="form-group">
-            <label for="flag">Flag:</label>
-            <input type="text" name="flag" id="flag" value="0">
-        </div>
+        <fieldset>
+            <legend class="sr-only">Opcode Configuration</legend>
+            <div class="form-group">
+                <label for="opcode">Opcode: <span aria-label="required">*</span></label>
+                <input type="text" name="opcode" id="opcode" placeholder="e.g., PCM_OP_TEST_LOOPBACK" required aria-required="true">
+            </div>
 
-        <div class="form-group">
-            <label for="flist">Flist:</label><br>
-            <textarea name="flist" id="flist" rows="20" cols="120" placeholder="Enter your Flist here..."></textarea>
-        </div>
+            <div class="form-group">
+                <label for="flag">Flag: <span aria-label="required">*</span></label>
+                <input type="text" name="flag" id="flag" value="0" aria-describedby="flag-help" required aria-required="true">
+                <span id="flag-help" class="form-help-text">Execution flag (default: 0)</span>
+            </div>
 
-        <button type="submit">Run Opcode</button>
+            <div class="form-group">
+                <label for="flist">Flist:</label>
+                <textarea name="flist" id="flist" rows="20" placeholder="Enter your Flist here..." aria-describedby="flist-help"></textarea>
+                <span id="flist-help" class="form-help-text">Enter the field list for the opcode</span>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary">Run Opcode</button>
     </form>
-    <pre id="opcode-results">Click "Run Opcode" to see the output.</pre>
+    <div aria-live="polite" aria-atomic="true">
+        <pre id="opcode-results">Click "Run Opcode" to see the output.</pre>
+    </div>
 </section>

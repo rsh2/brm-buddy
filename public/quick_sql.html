@@ -1,21 +1,36 @@
-<h2>Quick SQL</h2>
-<form id="run-sql-form">
-    <div class="form-group">
-        <label for="sql-domain-select">Domain:</label>
-        <select id="sql-domain-select">
-            <option value="">-- Select a Domain --</option>
-        </select>
+<section class="content-section" aria-labelledby="sql-title">
+    <h2 id="sql-title">Quick SQL</h2>
+    <form id="run-sql-form" aria-label="SQL query form">
+        <fieldset>
+            <legend class="sr-only">Query Selection</legend>
+            <div class="form-group">
+                <label for="sql-domain-select">Domain:</label>
+                <select id="sql-domain-select" aria-describedby="sql-domain-help">
+                    <option value="">-- Select a Domain --</option>
+                </select>
+                <span id="sql-domain-help" class="form-help-text">Choose a domain to see example queries</span>
+            </div>
+            <div class="form-group">
+                <label for="sql-task-select">SQL Query:</label>
+                <select id="sql-task-select" aria-describedby="sql-task-help">
+                    <option value="">-- Select a SQL Query --</option>
+                </select>
+                <span id="sql-task-help" class="form-help-text">Select a query to auto-fill the SQL field</span>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend class="sr-only">SQL Query</legend>
+            <div class="form-group">
+                <label for="sql-textarea">SQL Query: <span aria-label="required">*</span></label>
+                <textarea id="sql-textarea" rows="10" placeholder="Enter your SQL query here..." required aria-required="true" aria-describedby="sql-help"></textarea>
+                <span id="sql-help" class="form-help-text">Enter SELECT, INSERT, UPDATE, or other SQL statements</span>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="btn-primary">Run SQL</button>
+    </form>
+    <div aria-live="polite" aria-atomic="true">
+        <div id="sql-results"></div>
     </div>
-    <div class="form-group">
-        <label for="sql-task-select">SQL:</label>
-        <select id="sql-task-select">
-            <option value="">-- Select a SQL Query --</option>
-        </select>
-    </div>
-    <div class="form-group">
-        <label for="sql-textarea">SQL:</label>
-        <textarea id="sql-textarea" rows="10" placeholder="Enter your SQL query here..."></textarea>
-    </div>
-    <button type="submit">Run SQL</button>
-</form>
-<div id="sql-results"></div>
+</section>

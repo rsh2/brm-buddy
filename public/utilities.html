@@ -1,29 +1,39 @@
-<h2>Utilities</h2>
-<div class="content-section">
-    <h3>Unix Epoch Converter</h3>
-    <div class="converter">
-        <input type="text" id="epochInput" placeholder="Unix Epoch">
-        <div class="buttons-wrapper">
-            <button id="convertRight" class="btn" title="Convert to Readable">
-                <svg viewBox="0 0 24 24">
-                    <path d="M9 5l7 7-7 7"/>
-                </svg>
-            </button>
-            <button id="convertLeft" class="btn" title="Convert to Epoch">
-                <svg viewBox="0 0 24 24">
-                    <path d="M15 5l-7 7 7 7"/>
-                </svg>
-            </button>
+<section aria-labelledby="utilities-title">
+    <h2 id="utilities-title">Utilities</h2>
+    <div class="content-section">
+        <h3 id="epoch-converter-title">Unix Epoch Converter</h3>
+        <div class="converter" role="region" aria-labelledby="epoch-converter-title">
+            <div>
+                <label for="epochInput" class="sr-only">Unix Epoch timestamp</label>
+                <input type="text" id="epochInput" placeholder="Unix Epoch" aria-label="Unix Epoch timestamp" inputmode="numeric">
+            </div>
+            <div class="buttons-wrapper">
+                <button id="convertRight" class="btn" type="button" title="Convert to Readable" aria-label="Convert Unix Epoch to readable time">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+                <button id="convertLeft" class="btn" type="button" title="Convert to Epoch" aria-label="Convert readable time to Unix Epoch">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M15 5l-7 7 7 7"/>
+                    </svg>
+                </button>
+            </div>
+            <div>
+                <label for="readableInput" class="sr-only">Readable date and time</label>
+                <input type="text" id="readableInput" placeholder="YYYY-MM-DD HH:mm:ss" aria-label="Readable date and time (YYYY-MM-DD HH:mm:ss)">
+            </div>
         </div>
-        <input type="text" id="readableInput" placeholder="YYYY-MM-DD HH:mm:ss">
+        <div class="controls">
+            <div class="timezone-wrapper">
+                <label for="timezoneFilter" class="sr-only">Time Zone</label>
+                <input type="text" id="timezoneFilter" placeholder="Time Zone" aria-label="Time Zone filter" aria-describedby="timezone-help" aria-controls="timezoneDropdown" aria-autocomplete="list">
+                <span id="timezone-help" class="sr-only">Type to filter time zones</span>
+                <div id="timezoneDropdown" class="timezone-dropdown" role="listbox" aria-label="Time zone options"></div>
+            </div>
+            <div class="now-btn-wrapper">
+                <button id="nowButton" class="now-btn" type="button" aria-label="Set to current time">Now</button>
+            </div>
+        </div>
     </div>
-    <div class="controls">
-        <div class="timezone-wrapper">
-            <input type="text" id="timezoneFilter" placeholder="Time Zone">
-            <div id="timezoneDropdown" class="timezone-dropdown"></div>
-        </div>
-        <div class="now-btn-wrapper">
-            <button id="nowButton" class="now-btn">Now</button>
-        </div>
-    </div>
-</div>
+</section>
