@@ -47,15 +47,21 @@ except ImportError:
     from socketserver import ThreadingMixIn
 
 # URL parsing imports
-try:
-    # Python 2
-    import urlparse
-    import urllib
-    parse_qs = urlparse.parse_qs
-except (ImportError, AttributeError):
+# Handle Python 2 vs Python 3 differences
+if PY3:
     # Python 3
     import urllib.parse as urlparse
     parse_qs = urlparse.parse_qs
+else:
+    # Python 2
+    import urlparse
+    import urllib
+    # parse_qs was added in Python 2.6, may not exist in 2.3.4
+    try:
+        parse_qs = urlparse.parse_qs
+    except AttributeError:
+        # Will use fallback parse_qs function defined below
+        parse_qs = None
 
 # Subprocess imports (with fallback for very old Python 2)
 try:
@@ -146,21 +152,25 @@ def parse_query_string(qs):
     Returns:
         dict: Dictionary where each key maps to a list of values
     """
-    try:
-        return parse_qs(qs)
-    except:
-        # Manual fallback for very old Python
-        result = {}
-        pairs = qs.split('&')
-        for pair in pairs:
-            if '=' in pair:
-                k, v = pair.split('=', 1)
-                k, v = k.strip(), v.strip()
-                result.setdefault(k, []).append(v)
-            else:
-                k = pair.strip()
-                result.setdefault(k, []).append('')
-        return result
+    # Try to use parse_qs if available (Python 2.6+ or Python 3)
+    if parse_qs is not None:
+        try:
+            return parse_qs(qs)
+        except:
+            pass
+    
+    # Manual fallback for Python 2.3.4 and other old versions
+    result = {}
+    pairs = qs.split('&')
+    for pair in pairs:
+        if '=' in pair:
+            k, v = pair.split('=', 1)
+            k, v = k.strip(), v.strip()
+            result.setdefault(k, []).append(v)
+        else:
+            k = pair.strip()
+            result.setdefault(k, []).append('')
+    return result
 
 
 # =============================================================================
@@ -214,8 +224,10 @@ def _run_cmd_subprocess(cmd):
         )
         output = proc.communicate()[0]
         return decode_bytes(output)
-    except Exception as e:
-        return "Error running command %s: %s" % (cmd, str(e))
+    except:
+        # Get exception info in a way compatible with all Python versions
+        exc_info = sys.exc_info()
+        return "Error running command %s: %s" % (cmd, str(exc_info[1]))
 
 
 def _run_cmd_popen(cmd):
@@ -230,13 +242,16 @@ def _run_cmd_popen(cmd):
     """
     try:
         import pipes
-        cmdstr = " ".join(pipes.quote(arg) for arg in cmd)
+        # Python 2.3 doesn't support generator expressions, use list comprehension
+        cmdstr = " ".join([pipes.quote(arg) for arg in cmd])
         process = os.popen(cmdstr)
         output = process.read()
         process.close()
         return output
-    except Exception as e:
-        return "Error running command %s: %s" % (cmd, str(e))
+    except:
+        # Get exception info in a way compatible with all Python versions
+        exc_info = sys.exc_info()
+        return "Error running command %s: %s" % (cmd, str(exc_info[1]))
 
 
 def get_content_type(filepath):
@@ -324,8 +339,10 @@ class RequestHandler(BaseHTTPRequestHandler):
         
         try:
             self._serve_file(filepath)
-        except IOError as e:
-            self.send_error(500, 'Error Reading File: %s' % str(e))
+        except IOError:
+            # Get exception info in a way compatible with all Python versions
+            exc_info = sys.exc_info()
+            self.send_error(500, 'Error Reading File: %s' % str(exc_info[1]))
     
     def do_POST(self):
         """
@@ -352,12 +369,17 @@ class RequestHandler(BaseHTTPRequestHandler):
     def _get_filepath(self):
         """Determine the file path from the request URL."""
         path = self.path.lstrip('/')
-        return path if path else "public/index.html"
+        # Python 2.3 doesn't support ternary operator, use 'or' instead
+        return path or "public/index.html"
     
     def _serve_file(self, filepath):
         """Read and serve a static file with appropriate Content-Type."""
-        with open(filepath, 'rb') as f:
+        # Python 2.3 doesn't support 'with' statement, use try/finally
+        f = open(filepath, 'rb')
+        try:
             content = f.read()
+        finally:
+            f.close()
         
         self.send_response(200)
         self.send_header('Content-type', get_content_type(filepath))
